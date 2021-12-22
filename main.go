@@ -1,10 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"math/rand"
 	"os"
-	"pdam/migrations"
-	"strings"
+	"pdam/repository"
+	"time"
 
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
@@ -40,10 +42,7 @@ func main() {
 		log.Fatal("Database is required!")
 	}
 
-	var dsn string
-	if strings.ToLower(os.Getenv("DB_CONNECTION")) == "mysql" {
-		dsn = dbusername + ":" + dbpassword + "@tcp(" + dbhost + ":" + dbport + ")/" + dbdatabase + "?charset=utf8mb4&parseTime=True&loc=Local"
-	}
+	dsn := dbusername + ":" + dbpassword + "@tcp(" + dbhost + ":" + dbport + ")/" + dbdatabase + "?charset=utf8mb4&parseTime=True&loc=Local"
 
 	//koneksi ke database
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
@@ -52,7 +51,13 @@ func main() {
 		log.Fatal(err.Error())
 	}
 
-	//migration
-	db.Migrator().CurrentDatabase()
-	migrations.UserMigration(db)
+	rand.Seed(time.Now().UTC().UnixNano())
+	fmt.Println(rand.Int())
+	fmt.Println(rand.Int())
+	fmt.Println(rand.Int())
+
+	grouprepository := repository.NewGroupRepository(db)
+
+	fmt.Println(grouprepository.FindGroupByID(0))
+
 }
