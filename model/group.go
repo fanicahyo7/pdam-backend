@@ -3,8 +3,8 @@ package model
 import "time"
 
 type Group struct {
-	KodeGroup  int
-	Nama       string
+	Kode       string `gorm:"primarykey" binding:"required"`
+	Nama       string `binding:"required"`
 	Tarif1     float64
 	Tarif2     float64
 	Abonemen   float64

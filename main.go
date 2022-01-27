@@ -3,10 +3,9 @@ package main
 import (
 	"fmt"
 	"log"
-	"math/rand"
 	"os"
+	"pdam/model"
 	"pdam/repository"
-	"time"
 
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
@@ -51,13 +50,24 @@ func main() {
 		log.Fatal(err.Error())
 	}
 
-	rand.Seed(time.Now().UTC().UnixNano())
-	fmt.Println(rand.Int())
-	fmt.Println(rand.Int())
-	fmt.Println(rand.Int())
+	// rand.Seed(time.Now().UTC().UnixNano())
+	// fmt.Println(rand.Int())
+	// fmt.Println(rand.Int())
+	// fmt.Println(rand.Int())
 
 	grouprepository := repository.NewGroupRepository(db)
 
-	fmt.Println(grouprepository.FindGroupByID(0))
+	var input model.Group
+	input = model.Group{}
+	input.Kode = "111222"
+	input.Nama = "dari repo"
+	input.Tarif1 = 10000
+	input.Tarif2 = 15000
+
+	anu, err := grouprepository.UpdateGroup(input)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(anu)
 
 }
