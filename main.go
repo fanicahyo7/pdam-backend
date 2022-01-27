@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"pdam/model"
+	helper "pdam/Helper"
 	"pdam/repository"
+	"pdam/service"
 
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
@@ -57,17 +58,27 @@ func main() {
 
 	grouprepository := repository.NewGroupRepository(db)
 
-	var input model.Group
-	input = model.Group{}
-	input.Kode = "111222"
-	input.Nama = "dari repo"
-	input.Tarif1 = 10000
-	input.Tarif2 = 15000
+	// var input model.Group
+	// input = model.Group{}
+	// input.Kode = "111222"
+	// input.Nama = "dari repo"
+	// input.Tarif1 = 10000
+	// input.Tarif2 = 15000
 
-	anu, err := grouprepository.UpdateGroup(input)
+	// anu, err := grouprepository.FindGroupByName("repo")
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
+	// fmt.Println(anu)
+
+	groupservice := service.NewService(grouprepository)
+
+	input := helper.InputKodeGetGroup{}
+	input.Kode = "346546547"
+
+	err = groupservice.DeleteGroup(input)
 	if err != nil {
 		fmt.Println(err)
 	}
-	fmt.Println(anu)
 
 }
