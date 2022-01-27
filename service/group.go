@@ -92,7 +92,12 @@ func (s *service) EditGroup(input helper.Inputgroup) (model.Group, error) {
 }
 
 func (s *service) DeleteGroup(input helper.InputKodeGetGroup) error {
-	err := s.repository.DeleteGroup(input.Kode)
+	group, err := s.repository.FindGroupByID(input.Kode)
+	if err != nil {
+		return err
+	}
+
+	err = s.repository.DeleteGroup(group)
 	if err != nil {
 		return err
 	}

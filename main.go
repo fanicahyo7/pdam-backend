@@ -73,12 +73,17 @@ func main() {
 
 	groupservice := service.NewService(grouprepository)
 
-	input := helper.InputKodeGetGroup{}
-	input.Kode = "346546547"
+	input := helper.Inputgroup{}
+	input.Kode = "111222"
+	input.Nama = "dari repo"
+	input.Tarif1 = 10000
+	input.Tarif2 = 15000
 
-	err = groupservice.DeleteGroup(input)
+	anu, err := groupservice.SaveGroup(input)
 	if err != nil {
 		fmt.Println(err)
 	}
+
+	fmt.Println(anu)
 
 }

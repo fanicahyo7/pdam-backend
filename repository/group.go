@@ -20,7 +20,7 @@ type GroupRepository interface {
 	FindGroupByName(name string) ([]model.Group, error)
 	CreateGroup(group model.Group) (model.Group, error)
 	UpdateGroup(group model.Group) (model.Group, error)
-	DeleteGroup(kode string) error
+	DeleteGroup(group model.Group) error
 }
 
 func (r *grouprepository) FindGroupByAll() ([]model.Group, error) {
@@ -67,7 +67,7 @@ func (r *grouprepository) CreateGroup(group model.Group) (model.Group, error) {
 }
 
 func (r *grouprepository) UpdateGroup(group model.Group) (model.Group, error) {
-	err := r.db.Save(&group).Error
+	err := r.db.Model(&group).Select("Kode", "Nama", "Tarif1", "Tarif2", "Abonemen", "Kompensasi", "updated_at").Updates(group).Error
 	if err != nil {
 		return group, err
 	}
@@ -75,9 +75,8 @@ func (r *grouprepository) UpdateGroup(group model.Group) (model.Group, error) {
 	return group, nil
 }
 
-func (r *grouprepository) DeleteGroup(kode string) error {
-	var group model.Group
-	err := r.db.Where("Kode = ?", kode).First(&group).Error
+func (r *grouprepository) DeleteGroup(group model.Group) error {
+	err := r.db.Where("Kode = ?", group.Kode).First(&group).Error
 	if err != nil {
 		return err
 	}
