@@ -6,7 +6,7 @@ import (
 	"pdam/repository"
 )
 
-type Service interface {
+type GroupService interface {
 	GetGroups() ([]model.Group, error)
 	GetGroupByID(input helper.InputKodeGetGroup) (model.Group, error)
 	GetGroupByNama(input helper.InputNamaGetGroup) ([]model.Group, error)
@@ -15,15 +15,15 @@ type Service interface {
 	DeleteGroup(input helper.InputKodeGetGroup) error
 }
 
-type service struct {
+type groupService struct {
 	repository repository.GroupRepository
 }
 
-func NewService(repository repository.GroupRepository) *service {
-	return &service{repository}
+func NewService(repository repository.GroupRepository) *groupService {
+	return &groupService{repository}
 }
 
-func (s *service) GetGroups() ([]model.Group, error) {
+func (s *groupService) GetGroups() ([]model.Group, error) {
 	groups, err := s.repository.FindGroupByAll()
 	if err != nil {
 		return groups, err
@@ -32,7 +32,7 @@ func (s *service) GetGroups() ([]model.Group, error) {
 	return groups, nil
 }
 
-func (s *service) GetGroupByID(input helper.InputKodeGetGroup) (model.Group, error) {
+func (s *groupService) GetGroupByID(input helper.InputKodeGetGroup) (model.Group, error) {
 
 	groups, err := s.repository.FindGroupByID(input.Kode)
 
@@ -43,7 +43,7 @@ func (s *service) GetGroupByID(input helper.InputKodeGetGroup) (model.Group, err
 	return groups, nil
 }
 
-func (s *service) GetGroupByNama(input helper.InputNamaGetGroup) ([]model.Group, error) {
+func (s *groupService) GetGroupByNama(input helper.InputNamaGetGroup) ([]model.Group, error) {
 
 	groups, err := s.repository.FindGroupByName(input.Nama)
 
@@ -54,7 +54,7 @@ func (s *service) GetGroupByNama(input helper.InputNamaGetGroup) ([]model.Group,
 	return groups, nil
 }
 
-func (s *service) SaveGroup(input helper.Inputgroup) (model.Group, error) {
+func (s *groupService) SaveGroup(input helper.Inputgroup) (model.Group, error) {
 	group := model.Group{}
 	group.Kode = input.Kode
 	group.Nama = input.Nama
@@ -71,7 +71,7 @@ func (s *service) SaveGroup(input helper.Inputgroup) (model.Group, error) {
 	return newGroup, nil
 }
 
-func (s *service) EditGroup(input helper.Inputgroup) (model.Group, error) {
+func (s *groupService) EditGroup(input helper.Inputgroup) (model.Group, error) {
 	group, err := s.repository.FindGroupByID(input.Kode)
 	if err != nil {
 		return group, err
@@ -91,7 +91,7 @@ func (s *service) EditGroup(input helper.Inputgroup) (model.Group, error) {
 	return updateGroup, nil
 }
 
-func (s *service) DeleteGroup(input helper.InputKodeGetGroup) error {
+func (s *groupService) DeleteGroup(input helper.InputKodeGetGroup) error {
 	group, err := s.repository.FindGroupByID(input.Kode)
 	if err != nil {
 		return err

@@ -1,13 +1,13 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
-	helper "pdam/Helper"
+	"pdam/handler"
 	"pdam/repository"
 	"pdam/service"
 
+	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -73,17 +73,32 @@ func main() {
 
 	groupservice := service.NewService(grouprepository)
 
-	input := helper.Inputgroup{}
-	input.Kode = "111222"
-	input.Nama = "dari repo"
-	input.Tarif1 = 10000
-	input.Tarif2 = 15000
+	// input := helper.Inputgroup{}
+	// input.Kode = "111222"
+	// input.Nama = "dari repo"
+	// input.Tarif1 = 10000
+	// input.Tarif2 = 15000
 
-	anu, err := groupservice.SaveGroup(input)
-	if err != nil {
-		fmt.Println(err)
+	// anu, err := groupservice.GetGroups()
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
+
+	// fmt.Println(anu)
+
+	groupHandler := handler.NewGroupHandler(groupservice)
+
+	router := gin.Default()
+	api := router.Group("/api/v1")
+	api.GET("/group/:id", groupHandler.GetGroupByID)
+	groupResource := api.Group("/groups/")
+	{
+		groupResource.GET("/", groupHandler.GetGroups)
+		groupResource.GET("/:nama", groupHandler.GetGroupByNama)
+		groupResource.POST("/", groupHandler.CreateGroup)
+		groupResource.POST("/edit/", groupHandler.UpdateGroup)
+		groupResource.GET("/delete/:kode", groupHandler.DeleteGroup)
 	}
 
-	fmt.Println(anu)
-
+	router.Run(":8081")
 }
