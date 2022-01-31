@@ -121,12 +121,9 @@ func (h *groupHandler) UpdateGroup(c *gin.Context) {
 
 func (h *groupHandler) DeleteGroup(c *gin.Context) {
 	var input helper.InputKodeGetGroup
-
 	err := c.ShouldBindUri(&input)
 	if err != nil {
-		errormessagge := gin.H{"errors": err}
-
-		response := helper.ApiResponse("delete group failed", http.StatusUnprocessableEntity, "error", errormessagge)
+		response := helper.ApiResponse("error to delete group", http.StatusBadRequest, "error", nil)
 		c.JSON(http.StatusBadRequest, response)
 		return
 	}

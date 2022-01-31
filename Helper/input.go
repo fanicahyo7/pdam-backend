@@ -10,9 +10,9 @@ type Inputgroup struct {
 }
 
 type InputKodeGetGroup struct {
-	Kode string `binding:"required"`
+	Kode string `uri:"kode" binding:"required"`
 }
 
 type InputNamaGetGroup struct {
-	Nama string `binding:"required"`
+	Nama string `uri:"nama" binding:"required"`
 }
